@@ -36,10 +36,10 @@ public class Greg {
         Scanner sc = new Scanner(System.in);
 
         // Array to store 100 user inputs
-        String[] userInputs = new String[100];
+        String[] userTasks = new String[100];
 
         // Tracks the number of userInputs so far
-        int inputCount = 0;
+        int taskCount = 0;
 
         while (true) {
             String input = sc.nextLine();
@@ -55,16 +55,16 @@ public class Greg {
             // list Command: Prints a numbered list of stored userInputs
             if (input.equals("list")) {
                 System.out.println(line);
-                for (int i = 0; i < inputCount; i++) {
-                    System.out.println((i + 1) + ". " + userInputs[i]);
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + userTasks[i]);
                 }
                 System.out.println(line);
                 continue;
             }
 
             // Store userInput into array & increment userInput count
-            userInputs[inputCount] = input;
-            inputCount++;
+            userTasks[taskCount] = input;
+            taskCount++;
 
             System.out.println(line);
             System.out.println("added: " + input);
