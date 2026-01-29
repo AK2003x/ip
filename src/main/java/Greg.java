@@ -3,11 +3,13 @@ import java.util.Scanner;
 /**
  * Runs the Greg chatbot greeting program.
  * Prints an ASCII logo of GREG and a short greeting
- * Prints an intro message, then supports adding and listing tasks until the user enters "bye"
+ * Prints an intro message,
+ * Adds tasks, lists tasks, and supports marking tasks as done.
  */
 public class Greg {
     /**
-     * Starts the program, reads user input, stores tasks, lists tasks, and exits on "bye"
+     * Sends an intro message, reads user input, processes commands, and exits on "bye"
+     * Input lines that are not "list", "mark", or "bye" are treated as tasks to be stored.
      *
      * @param args Command-line arguments.
      */
@@ -32,13 +34,16 @@ public class Greg {
         System.out.println(" How can I be of service to you today my good sir!");
         System.out.println(line);
 
-        // Reads user input
+        // Reads task input
         Scanner sc = new Scanner(System.in);
 
-        // Array to store 100 user inputs
+        // Array to store 100 taskInputs
         String[] userTasks = new String[100];
 
-        // Tracks the number of userInputs so far
+        // Tracks whether each task is done, where done[i] corresponds to userTasks[i].
+        boolean[] completed = new boolean[100];
+
+        // Tracks the number of taskInputs so far
         int taskCount = 0;
 
         while (true) {
@@ -52,18 +57,41 @@ public class Greg {
                 break;
             }
 
-            // list Command: Prints a numbered list of stored userInputs
+            // list Command: Prints a numbered list of stored taskInputs
             if (input.equals("list")) {
                 System.out.println(line);
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + ". " + userTasks[i]);
+                    System.out.println((i + 1) + "." + (completed[i] ? "[X] " : "[ ] ") + userTasks[i]);
                 }
                 System.out.println(line);
                 continue;
             }
 
-            // Store userInput into array & increment userInput count
+            // mark Command: Marks a designated task "completed"
+            if (input.startsWith("mark ")) {
+                // Extracts and converts the designated task to interact with into an integer
+                int index = Integer.parseInt(input.substring(5).trim()) - 1;
+
+                // Checks if designated task is an existing stored task
+                if (index >= 0 && index < taskCount) {
+                    completed[index] = true;
+
+                    System.out.println(line);
+                    System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
+                    System.out.println("  [X] " + userTasks[index]);
+                    System.out.println("Keep it up!!!!!");
+                    System.out.println(line);
+                } else {
+                    System.out.println(line);
+                    System.out.println("Sorry, but I am going to need you to provide a valid task number, please!");
+                    System.out.println(line);
+                }
+                continue;
+            }
+
+            // Store taskInput into array, update boolean array & increment taskInput count
             userTasks[taskCount] = input;
+            completed[taskCount] = false;
             taskCount++;
 
             System.out.println(line);
