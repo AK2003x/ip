@@ -1,0 +1,18 @@
+public class Greg {
+    public static void main(String[] args) {
+        // Temporary intro logo
+        String chatbotName = "Greg";
+        String line = "--------------------------------------------";
+        String logo =
+                "  ____   ____   _____   ____  \n"
+                        + " / ___| |  _ \\ | ____| / ___| \n"
+                        + "| |  _  | |_) ||  _|  | |  _  \n"
+                        + "| |_| | |  _ < | |___ | |_| | \n"
+                        + " \\____| |_| \\_\\|_____| \\____| \n";
+        //
+        System.out.println(line);
+        System.out.println(logo);
+        System.out.println(line);
+        System.out.println(" Hello! I'm " + chatbotName);
+    }
+}
