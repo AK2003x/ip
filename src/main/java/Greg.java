@@ -31,7 +31,8 @@ public class Greg {
         System.out.println(logo);
         System.out.println(line);
         System.out.println(" GREETINGS! I'm " + chatbotName + " :)))");
-        System.out.println(" How can I be of service to you today my good sir!");
+        System.out.println(" I am your personal Task Tracking Assistant!");
+        System.out.println(" How may I be of service to you today?");
         System.out.println(line);
 
         // Reads task input
