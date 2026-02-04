@@ -9,7 +9,7 @@ public class Deadline extends Task {
 
     /**
      * Constructor for the Deadline class.
-     * Initialises the task description and the deadline
+     * Initialises the task with the description and deadline.
      *
      * @param description The description of the task.
      * @param by The deadline by which the task must be completed.
@@ -21,7 +21,7 @@ public class Deadline extends Task {
 
     /**
      * Returns a string representation of the Deadline task.
-     * This overrides the toString() method in the Task class to include the deadline.
+     * Overrides the toString() method in the Task class to include the deadline.
      *
      * @return A string representing the Deadline task, including the description and deadline.
      */

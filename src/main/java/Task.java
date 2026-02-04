@@ -10,7 +10,7 @@ public class Task {
 
     /**
      * Constructor for the Task class.
-     * Initialises the task with a specific description.
+     * Initialises a task with a specific description.
      *
      * @param description The description of the task.
      */
