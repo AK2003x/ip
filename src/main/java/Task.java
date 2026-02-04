@@ -1,6 +1,6 @@
 /**
  * The Task class represents a general task with a description.
- * It is also a base class for similar Classes to inherit from such as Deadline, Todo & event
+ * It is also a base class for similar Classes to inherit from such as Deadline, Todo & event.
  */
 public class Task {
 
