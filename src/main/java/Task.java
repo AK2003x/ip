@@ -5,8 +5,10 @@
 public class Task {
 
     // The description of the task.
-    // This is a protected field, allowing subclasses to access it.
     protected String description;
+
+    // Tracks whether the task is completed.
+    protected boolean isDone;
 
     /**
      * Constructor for the Task class.
@@ -16,6 +18,24 @@ public class Task {
      */
     public Task(String description) {
         this.description = description;
+    }
+
+    /**
+     * Returns whether this task is completed.
+     *
+     * @return True if task is done, false otherwise.
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
+     * Sets the completion status of this task.
+     *
+     * @param done True if task should be marked done, false otherwise.
+     */
+    public void setDone(boolean done) {
+        isDone = done;
     }
 
     /**

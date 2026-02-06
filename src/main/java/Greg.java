@@ -44,9 +44,6 @@ public class Greg {
         // Store tasks as Task objects
         Task[] tasks = new Task[100];
 
-        // Track completion
-        boolean[] completed = new boolean[100];
-
         int taskCount = 0;
 
         while (true) {
@@ -65,7 +62,7 @@ public class Greg {
                 System.out.println(line);
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    String status = completed[i] ? "[X]" : "[ ]";
+                    String status = tasks[i].isDone() ? "[X]" : "[ ]";
                     System.out.println((i + 1) + "." + tasks[i].toString().substring(0, 3) + status
                             + tasks[i].toString().substring(3));
                 }
@@ -78,11 +75,11 @@ public class Greg {
                 int index = Integer.parseInt(input.substring(5).trim()) - 1;
 
                 if (index >= 0 && index < taskCount) {
-                    completed[index] = true;
+                    tasks[index].setDone(true);
 
                     System.out.println(line);
                     System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
-                    System.out.println("  " + tasks[index].toString().substring(0, 3) + "[X]"
+                    System.out.println("  " + tasks[index].toString().substring(0, 3) + "[X] "
                             + tasks[index].toString().substring(3));
                     System.out.println("Keep it up!!!!!");
                     System.out.println(line);
@@ -98,7 +95,6 @@ public class Greg {
             if (input.startsWith("todo ")) {
                 String description = input.substring(5).trim();
                 tasks[taskCount] = new Todo(description);
-                completed[taskCount] = false;
 
                 System.out.println(line);
                 System.out.println("Got it. I've added this task:");
@@ -118,7 +114,6 @@ public class Greg {
                 String by = parts.length < 2 ? "" : parts[1].trim();
 
                 tasks[taskCount] = new Deadline(description, by);
-                completed[taskCount] = false;
 
                 System.out.println(line);
                 System.out.println("Got it. I've added this task:");
@@ -148,7 +143,6 @@ public class Greg {
                 }
 
                 tasks[taskCount] = new Event(description, from, to);
-                completed[taskCount] = false;
 
                 System.out.println(line);
                 System.out.println("Got it. I've added this task:");
@@ -161,7 +155,6 @@ public class Greg {
 
             // If user types random text, treat it as Todo
             tasks[taskCount] = new Todo(input);
-            completed[taskCount] = false;
 
             System.out.println(line);
             System.out.println("Got it. I've added this task:");
