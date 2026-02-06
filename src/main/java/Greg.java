@@ -6,6 +6,20 @@ import java.util.Scanner;
  * Supports listing tasks and marking tasks as done.
  */
 public class Greg {
+    /**
+     * Starts the Greg chatbot, prints a greeting and logo, then continuously reads user commands
+     * until the user enters "bye".
+     *
+     * Supported commands:
+     * list - lists all tasks currently stored.
+     * mark N - marks task number N as completed.
+     * todo DESCRIPTION - adds a Todo task.
+     * deadline DESCRIPTION /by BY - adds a Deadline task.
+     * event DESCRIPTION /from START /to END - adds an Event task.
+     * any other input - treated as a Todo task.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         String chatbotName = "Greg";
         String line = "--------------------------------------------";
@@ -59,7 +73,7 @@ public class Greg {
                 continue;
             }
 
-            // mark command: Mark a task as completed
+            // mark command: Mark a specified task as completed
             if (input.startsWith("mark ")) {
                 int index = Integer.parseInt(input.substring(5).trim()) - 1;
 
@@ -80,7 +94,7 @@ public class Greg {
                 continue;
             }
 
-            // Add toDo Task
+            // Add toDo Task with DESCRIPTION
             if (input.startsWith("todo ")) {
                 String description = input.substring(5).trim();
                 tasks[taskCount] = new Todo(description);
@@ -95,7 +109,7 @@ public class Greg {
                 continue;
             }
 
-            // Add Deadline Task
+            // Add Deadline Task with DESCRIPTION and deadline BY
             if (input.startsWith("deadline ")) {
                 String rest = input.substring(9).trim();
                 String[] parts = rest.split(" /by ", 2);
@@ -115,7 +129,7 @@ public class Greg {
                 continue;
             }
 
-            // Add Event Task
+            // Add Event Task with DESCRIPTION, from: START, by: END
             if (input.startsWith("event ")) {
                 String rest = input.substring(6).trim();
 
