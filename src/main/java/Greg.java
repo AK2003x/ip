@@ -1,24 +1,15 @@
 import java.util.Scanner;
 
 /**
- * Runs the Greg chatbot greeting program.
- * Prints an ASCII logo of GREG and a short greeting
- * Prints an intro message,
- * Adds tasks, lists tasks, and supports marking tasks as done.
+ * Runs the Greg chatbot program.
+ * Supports adding Todo, Deadline, and Event tasks using inheritance + polymorphism.
+ * Supports listing tasks and marking tasks as done.
  */
 public class Greg {
-    /**
-     * Sends an intro message, reads user input, processes commands, and exits on "bye"
-     * Input lines that are not "list", "mark", or "bye" are treated as tasks to be stored.
-     *
-     * @param args Command-line arguments.
-     */
     public static void main(String[] args) {
-        // Display name of Chatbot
         String chatbotName = "Greg";
         String line = "--------------------------------------------";
 
-        // Display Logo of Chatbot
         String logo =
                 "  ____   ____   _____   ____  \n"
                         + " / ___| |  _ \\ | ____| / ___| \n"
@@ -26,7 +17,6 @@ public class Greg {
                         + "| |_| | |  _ < | |___ | |_| | \n"
                         + " \\____| |_| \\_\\|_____| \\____| \n";
 
-        // Print introduction once
         System.out.println(line);
         System.out.println(logo);
         System.out.println(line);
@@ -35,22 +25,20 @@ public class Greg {
         System.out.println(" How may I be of service to you today?");
         System.out.println(line);
 
-        // Reads task input
         Scanner sc = new Scanner(System.in);
 
-        // Array to store 100 taskInputs
-        String[] userTasks = new String[100];
+        // Store tasks as Task objects
+        Task[] tasks = new Task[100];
 
-        // Tracks whether each task is done, where done[i] corresponds to userTasks[i].
+        // Track completion
         boolean[] completed = new boolean[100];
 
-        // Tracks the number of taskInputs so far
         int taskCount = 0;
 
         while (true) {
-            String input = sc.nextLine();
+            String input = sc.nextLine().trim();
 
-            // bye Command: Exits loop
+            // bye command: Exits chatbot
             if (input.equals("bye")) {
                 System.out.println(line);
                 System.out.println(" Bye. Hope to see you again soon!");
@@ -58,28 +46,30 @@ public class Greg {
                 break;
             }
 
-            // list Command: Prints a numbered list of stored taskInputs
+            // list command: Lists out Tasks
             if (input.equals("list")) {
                 System.out.println(line);
+                System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + "." + (completed[i] ? "[X] " : "[ ] ") + userTasks[i]);
+                    String status = completed[i] ? "[X]" : "[ ]";
+                    System.out.println((i + 1) + "." + tasks[i].toString().substring(0, 3) + status
+                            + tasks[i].toString().substring(3));
                 }
                 System.out.println(line);
                 continue;
             }
 
-            // mark Command: Marks a designated task "completed"
+            // mark command: Mark a task as completed
             if (input.startsWith("mark ")) {
-                // Extracts and converts the designated task to interact with into an integer
                 int index = Integer.parseInt(input.substring(5).trim()) - 1;
 
-                // Checks if designated task is an existing stored task
                 if (index >= 0 && index < taskCount) {
                     completed[index] = true;
 
                     System.out.println(line);
                     System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
-                    System.out.println("  [X] " + userTasks[index]);
+                    System.out.println("  " + tasks[index].toString().substring(0, 3) + "[X]"
+                            + tasks[index].toString().substring(3));
                     System.out.println("Keep it up!!!!!");
                     System.out.println(line);
                 } else {
@@ -90,15 +80,83 @@ public class Greg {
                 continue;
             }
 
-            // Store taskInput into array, update boolean array & increment taskInput count
-            userTasks[taskCount] = input;
+            // Add toDo Task
+            if (input.startsWith("todo ")) {
+                String description = input.substring(5).trim();
+                tasks[taskCount] = new Todo(description);
+                completed[taskCount] = false;
+
+                System.out.println(line);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  [T][ ] " + description);
+                taskCount++;
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                System.out.println(line);
+                continue;
+            }
+
+            // Add Deadline Task
+            if (input.startsWith("deadline ")) {
+                String rest = input.substring(9).trim();
+                String[] parts = rest.split(" /by ", 2);
+
+                String description = parts[0].trim();
+                String by = parts.length < 2 ? "" : parts[1].trim();
+
+                tasks[taskCount] = new Deadline(description, by);
+                completed[taskCount] = false;
+
+                System.out.println(line);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  [D][ ] " + description + " (by: " + by + ")");
+                taskCount++;
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                System.out.println(line);
+                continue;
+            }
+
+            // Add Event Task
+            if (input.startsWith("event ")) {
+                String rest = input.substring(6).trim();
+
+                String[] firstSplit = rest.split(" /from ", 2);
+                String description = firstSplit[0].trim();
+
+                String from = "";
+                String to = "";
+
+                if (firstSplit.length == 2) {
+                    String[] secondSplit = firstSplit[1].split(" /to ", 2);
+                    from = secondSplit[0].trim();
+                    if (secondSplit.length == 2) {
+                        to = secondSplit[1].trim();
+                    }
+                }
+
+                tasks[taskCount] = new Event(description, from, to);
+                completed[taskCount] = false;
+
+                System.out.println(line);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  [E][ ] " + description + " (from: " + from + " to: " + to + ")");
+                taskCount++;
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                System.out.println(line);
+                continue;
+            }
+
+            // If user types random text, treat it as Todo
+            tasks[taskCount] = new Todo(input);
             completed[taskCount] = false;
-            taskCount++;
 
             System.out.println(line);
-            System.out.println("added: " + input);
+            System.out.println("Got it. I've added this task:");
+            System.out.println("  [T][ ] " + input);
+            taskCount++;
+            System.out.println("Now you have " + taskCount + " tasks in the list.");
             System.out.println(line);
         }
+
         sc.close();
     }
 }
