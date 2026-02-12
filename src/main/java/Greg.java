@@ -63,8 +63,7 @@ public class Greg {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
                     String status = tasks[i].isDone() ? "[X]" : "[ ]";
-                    System.out.println((i + 1) + "." + tasks[i].toString().substring(0, 3) + status
-                            + tasks[i].toString().substring(3));
+                    System.out.println((i + 1) + ". " + tasks[i]);
                 }
                 System.out.println(line);
                 continue;
@@ -79,8 +78,7 @@ public class Greg {
 
                     System.out.println(line);
                     System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
-                    System.out.println("  " + tasks[index].toString().substring(0, 3) + "[X] "
-                            + tasks[index].toString().substring(3));
+                    System.out.println("  " + tasks[index]);
                     System.out.println("Keep it up!!!!!");
                     System.out.println(line);
                 } else {
@@ -158,7 +156,7 @@ public class Greg {
 
             System.out.println(line);
             System.out.println("Got it. I've added this task:");
-            System.out.println("  [T][ ] " + input);
+            System.out.println("  " + tasks[taskCount]);
             taskCount++;
             System.out.println("Now you have " + taskCount + " tasks in the list.");
             System.out.println(line);
