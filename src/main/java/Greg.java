@@ -16,9 +16,7 @@ public class Greg {
      * todo DESCRIPTION - adds a Todo task.
      * deadline DESCRIPTION /by BY - adds a Deadline task.
      * event DESCRIPTION /from START /to END - adds an Event task.
-     * any other input - treated as a Todo task.
-     *
-     * @param args Command-line arguments (not used).
+     * * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
         String chatbotName = "Greg";
@@ -57,111 +55,116 @@ public class Greg {
                 break;
             }
 
-            // list command: Lists out Tasks
-            if (input.equals("list")) {
-                System.out.println(line);
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < taskCount; i++) {
-                    String status = tasks[i].isDone() ? "[X]" : "[ ]";
-                    System.out.println((i + 1) + ". " + tasks[i]);
-                }
-                System.out.println(line);
-                continue;
-            }
-
-            // mark command: Mark a specified task as completed
-            if (input.startsWith("mark ")) {
-                int index = Integer.parseInt(input.substring(5).trim()) - 1;
-
-                if (index >= 0 && index < taskCount) {
-                    tasks[index].setDone(true);
-
+            try {
+                // list command: Lists out Tasks
+                if (input.equals("list")) {
                     System.out.println(line);
-                    System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
-                    System.out.println("  " + tasks[index]);
-                    System.out.println("Keep it up!!!!!");
-                    System.out.println(line);
-                } else {
-                    System.out.println(line);
-                    System.out.println("Sorry, but I am going to need you to provide a valid task number, please!");
-                    System.out.println(line);
-                }
-                continue;
-            }
-
-            // Add toDo Task with DESCRIPTION
-            if (input.startsWith("todo ")) {
-                String description = input.substring(5).trim();
-                tasks[taskCount] = new Todo(description);
-
-                System.out.println(line);
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  [T][ ] " + description);
-                taskCount++;
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
-                System.out.println(line);
-                continue;
-            }
-
-            // Add Deadline Task with DESCRIPTION and deadline BY
-            if (input.startsWith("deadline ")) {
-                String rest = input.substring(9).trim();
-                String[] parts = rest.split(" /by ", 2);
-
-                String description = parts[0].trim();
-                String by = parts.length < 2 ? "" : parts[1].trim();
-
-                tasks[taskCount] = new Deadline(description, by);
-
-                System.out.println(line);
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  [D][ ] " + description + " (by: " + by + ")");
-                taskCount++;
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
-                System.out.println(line);
-                continue;
-            }
-
-            // Add Event Task with DESCRIPTION, from: START, by: END
-            if (input.startsWith("event ")) {
-                String rest = input.substring(6).trim();
-
-                String[] firstSplit = rest.split(" /from ", 2);
-                String description = firstSplit[0].trim();
-
-                String from = "";
-                String to = "";
-
-                if (firstSplit.length == 2) {
-                    String[] secondSplit = firstSplit[1].split(" /to ", 2);
-                    from = secondSplit[0].trim();
-                    if (secondSplit.length == 2) {
-                        to = secondSplit[1].trim();
+                    if (taskCount == 0) {
+                        System.out.println("Your list is currently empty!");
+                    } else {
+                        System.out.println("Here are the tasks in your list:");
+                        for (int i = 0; i < taskCount; i++) {
+                            System.out.println((i + 1) + ". " + tasks[i]);
+                        }
                     }
+                    System.out.println(line);
+
+                    // mark command: Mark a specified task as completed
+                } else if (input.startsWith("mark")) {
+                    if (input.length() <= 5) {
+                        throw new GregException("I need a task number to mark! Try 'mark 1'.");
+                    }
+
+                    try {
+                        int index = Integer.parseInt(input.substring(5).trim()) - 1;
+
+                        if (index >= 0 && index < taskCount) {
+                            tasks[index].setDone(true);
+
+                            System.out.println(line);
+                            System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
+                            System.out.println("  " + tasks[index]);
+                            System.out.println("Keep it up!!!!!");
+                            System.out.println(line);
+                        } else {
+                            throw new GregException("I can't mark task #" + (index + 1) + ". You only have " + taskCount + " tasks!");
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new GregException("That's not a valid number! Please use 'mark [number]'.");
+                    }
+
+                    // Add toDo Task with DESCRIPTION
+                } else if (input.startsWith("todo")) {
+                    if (input.length() <= 5) {
+                        throw new GregException("The description of a todo cannot be empty. What are we planning?");
+                    }
+                    String description = input.substring(5).trim();
+                    tasks[taskCount] = new Todo(description);
+                    taskCount++;
+                    printTaskAddedConfirmation(tasks[taskCount - 1], taskCount, line);
+
+                    // Add Deadline Task with DESCRIPTION and deadline BY
+                } else if (input.startsWith("deadline")) {
+                    if (input.length() <= 9) {
+                        throw new GregException("A deadline needs a description and time. Try: deadline fix bug /by tonight");
+                    }
+                    String rest = input.substring(9).trim();
+                    if (!rest.contains(" /by ")) {
+                        throw new GregException("I need a '/by' to know when the deadline is!");
+                    }
+                    String[] parts = rest.split(" /by ", 2);
+
+                    tasks[taskCount] = new Deadline(parts[0].trim(), parts[1].trim());
+                    taskCount++;
+                    printTaskAddedConfirmation(tasks[taskCount - 1], taskCount, line);
+
+                    // Add Event Task with DESCRIPTION, from: START, by: END
+                } else if (input.startsWith("event")) {
+                    if (input.length() <= 6) {
+                        throw new GregException("An event needs a name, /from, and /to. Try: event party /from 6pm /to 10pm");
+                    }
+                    String rest = input.substring(6).trim();
+                    if (!rest.contains(" /from ") || !rest.contains(" /to ")) {
+                        throw new GregException("Events must follow the format: event [name] /from [start] /to [end]");
+                    }
+
+                    String[] firstSplit = rest.split(" /from ", 2);
+                    String description = firstSplit[0].trim();
+                    String[] secondSplit = firstSplit[1].split(" /to ", 2);
+
+                    tasks[taskCount] = new Event(description, secondSplit[0].trim(), secondSplit[1].trim());
+                    taskCount++;
+                    printTaskAddedConfirmation(tasks[taskCount - 1], taskCount, line);
+
+                } else {
+                    // Replaces the default Todo behavior with an Exception for unknown commands
+                    throw new GregException("I'm sorry, but I don't know what '" + input + "' means :-( Try using todo, deadline, or event!");
                 }
 
-                tasks[taskCount] = new Event(description, from, to);
-
+            } catch (GregException e) {
+                /**
+                 * Catches chatbot-specific errors
+                 */
                 System.out.println(line);
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  [E][ ] " + description + " (from: " + from + " to: " + to + ")");
-                taskCount++;
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                System.out.println(" [ERROR]  " + e.getMessage());
                 System.out.println(line);
-                continue;
             }
-
-            // If user types random text, treat it as Todo
-            tasks[taskCount] = new Todo(input);
-
-            System.out.println(line);
-            System.out.println("Got it. I've added this task:");
-            System.out.println("  " + tasks[taskCount]);
-            taskCount++;
-            System.out.println("Now you have " + taskCount + " tasks in the list.");
-            System.out.println(line);
         }
 
         sc.close();
+    }
+
+    /**
+     * Prints a confirmation message after a task has been successfully added to the list.
+     * * @param task The task object that was just added.
+     * @param total The total number of tasks currently in the list.
+     * @param line The decorative line string for formatting.
+     */
+    private static void printTaskAddedConfirmation(Task task, int total, String line) {
+        System.out.println(line);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + total + " tasks in the list.");
+        System.out.println(line);
     }
 }
