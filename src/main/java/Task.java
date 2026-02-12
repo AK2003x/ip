@@ -46,6 +46,7 @@ public class Task {
      */
     @Override
     public String toString() {
-        return description; // Returns the description of the task as a string.
+        String status = isDone ? "[X]" : "[ ]";
+        return status + " " + description;
     }
 }
