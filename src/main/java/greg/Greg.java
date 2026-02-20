@@ -1,25 +1,33 @@
+package greg;
+
 import java.util.Scanner;
 
+import greg.exception.GregException;
+import greg.task.Deadline;
+import greg.task.Event;
+import greg.task.Task;
+import greg.task.Todo;
+
 /**
- * Runs the Greg chatbot program.
- * Supports adding Todo, Deadline, and Event tasks using inheritance + polymorphism.
+ * Runs the greg.Greg chatbot program.
+ * Supports adding greg.task.Todo, greg.task.Deadline, and greg.task.Event tasks using inheritance + polymorphism.
  * Supports listing tasks and marking tasks as done.
  */
 public class Greg {
     /**
-     * Starts the Greg chatbot, prints a greeting and logo, then continuously reads user commands
+     * Starts the greg.Greg chatbot, prints a greeting and logo, then continuously reads user commands
      * until the user enters "bye".
      *
      * Supported commands:
      * list - lists all tasks currently stored.
      * mark N - marks task number N as completed.
-     * todo DESCRIPTION - adds a Todo task.
-     * deadline DESCRIPTION /by BY - adds a Deadline task.
-     * event DESCRIPTION /from START /to END - adds an Event task.
+     * todo DESCRIPTION - adds a greg.task.Todo task.
+     * deadline DESCRIPTION /by BY - adds a greg.task.Deadline task.
+     * event DESCRIPTION /from START /to END - adds an greg.task.Event task.
      * * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
-        String chatbotName = "Greg";
+        String chatbotName = "greg.Greg";
         String line = "--------------------------------------------";
 
         String logo =
@@ -33,13 +41,13 @@ public class Greg {
         System.out.println(logo);
         System.out.println(line);
         System.out.println(" GREETINGS! I'm " + chatbotName + " :)))");
-        System.out.println(" I am your personal Task Tracking Assistant!");
+        System.out.println(" I am your personal greg.task.Task Tracking Assistant!");
         System.out.println(" How may I be of service to you today?");
         System.out.println(line);
 
         Scanner sc = new Scanner(System.in);
 
-        // Store tasks as Task objects
+        // Store tasks as greg.task.Task objects
         Task[] tasks = new Task[100];
 
         int taskCount = 0;
@@ -93,7 +101,7 @@ public class Greg {
                         throw new GregException("That's not a valid number! Please use 'mark [number]'.");
                     }
 
-                    // Add toDo Task with DESCRIPTION
+                    // Add toDo greg.task.Task with DESCRIPTION
                 } else if (input.startsWith("todo")) {
                     if (input.length() <= 5) {
                         throw new GregException("The description of a todo cannot be empty. What are we planning?");
@@ -103,7 +111,7 @@ public class Greg {
                     taskCount++;
                     printTaskAddedConfirmation(tasks[taskCount - 1], taskCount, line);
 
-                    // Add Deadline Task with DESCRIPTION and deadline BY
+                    // Add greg.task.Deadline greg.task.Task with DESCRIPTION and deadline BY
                 } else if (input.startsWith("deadline")) {
                     if (input.length() <= 9) {
                         throw new GregException("A deadline needs a description and time. Try: deadline fix bug /by tonight");
@@ -118,7 +126,7 @@ public class Greg {
                     taskCount++;
                     printTaskAddedConfirmation(tasks[taskCount - 1], taskCount, line);
 
-                    // Add Event Task with DESCRIPTION, from: START, by: END
+                    // Add greg.task.Event greg.task.Task with DESCRIPTION, from: START, by: END
                 } else if (input.startsWith("event")) {
                     if (input.length() <= 6) {
                         throw new GregException("An event needs a name, /from, and /to. Try: event party /from 6pm /to 10pm");
@@ -137,7 +145,7 @@ public class Greg {
                     printTaskAddedConfirmation(tasks[taskCount - 1], taskCount, line);
 
                 } else {
-                    // Replaces the default Todo behavior with an Exception for unknown commands
+                    // Replaces the default greg.task.Todo behavior with an Exception for unknown commands
                     throw new GregException("I'm sorry, but I don't know what '" + input + "' means :-( Try using todo, deadline, or event!");
                 }
 

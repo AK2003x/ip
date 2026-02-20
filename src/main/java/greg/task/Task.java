@@ -1,6 +1,8 @@
+package greg.task;
+
 /**
- * The Task class represents a general task with a description.
- * It is also a base class for similar Classes to inherit from such as Deadline, Todo & event.
+ * The greg.task.Task class represents a general task with a description.
+ * It is also a base class for similar Classes to inherit from such as greg.task.Deadline, greg.task.Todo & event.
  */
 public class Task {
 
@@ -11,7 +13,7 @@ public class Task {
     protected boolean isDone;
 
     /**
-     * Constructor for the Task class.
+     * Constructor for the greg.task.Task class.
      * Initialises a task with a specific description.
      *
      * @param description The description of the task.

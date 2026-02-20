@@ -1,6 +1,8 @@
+package greg.task;
+
 /**
- * The Event class represents a task that starts at a specific time and ends at a specific time.
- * It extends the Task class by adding a start ("start") and end ("end") time.
+ * The greg.task.Event class represents a task that starts at a specific time and ends at a specific time.
+ * It extends the greg.task.Task class by adding a start ("start") and end ("end") time.
  */
 public class Event extends Task {
 
@@ -11,7 +13,7 @@ public class Event extends Task {
     protected String end;
 
     /**
-     * Constructs an Event task with the given description, start time, and end time.
+     * Constructs an greg.task.Event task with the given description, start time, and end time.
      *
      * @param description The description of the event task.
      * @param start The start time of the event.
@@ -24,8 +26,8 @@ public class Event extends Task {
     }
 
     /**
-     * Returns a string representation of the Event task.
-     * Overrides Task's toString() method to add the [E] tag and event time range.
+     * Returns a string representation of the greg.task.Event task.
+     * Overrides greg.task.Task's toString() method to add the [E] tag and event time range.
      *
      * @return A string representing the event task.
      */

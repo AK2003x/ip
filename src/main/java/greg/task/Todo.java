@@ -1,10 +1,12 @@
+package greg.task;
+
 /**
- * The Todo class represents a task without any date or time attached.
+ * The greg.task.Todo class represents a task without any date or time attached.
  */
 public class Todo extends Task {
 
     /**
-     * Constructor for the Todo Class.
+     * Constructor for the greg.task.Todo Class.
      * Initialises the task with the description.
      *
      * @param description The description of the todo task.
@@ -14,10 +16,10 @@ public class Todo extends Task {
     }
 
     /**
-     * Returns a string representation of the Todo task.
-     * Overrides the Task's toString() method to add the [T] tag.
+     * Returns a string representation of the greg.task.Todo task.
+     * Overrides the greg.task.Task's toString() method to add the [T] tag.
      *
-     * @return A string representing the Todo task.
+     * @return A string representing the greg.task.Todo task.
      */
     @Override
     public String toString() {

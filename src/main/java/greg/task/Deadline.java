@@ -1,6 +1,8 @@
+package greg.task;
+
 /**
- * The Deadline class represents a task with a specific deadline.
- * It extends the Task class and adds a "by" property to indicate when the task must be completed.
+ * The greg.task.Deadline class represents a task with a specific deadline.
+ * It extends the greg.task.Task class and adds a "by" property to indicate when the task must be completed.
  */
 public class Deadline extends Task {
 
@@ -8,7 +10,7 @@ public class Deadline extends Task {
     protected String by;
 
     /**
-     * Constructor for the Deadline class.
+     * Constructor for the greg.task.Deadline class.
      * Initialises the task with the description and deadline.
      *
      * @param description The description of the task.
@@ -20,10 +22,10 @@ public class Deadline extends Task {
     }
 
     /**
-     * Returns a string representation of the Deadline task.
-     * Overrides the toString() method in the Task class to include the deadline.
+     * Returns a string representation of the greg.task.Deadline task.
+     * Overrides the toString() method in the greg.task.Task class to include the deadline.
      *
-     * @return A string representing the Deadline task, including the description and deadline.
+     * @return A string representing the greg.task.Deadline task, including the description and deadline.
      */
     @Override
     public String toString() {
