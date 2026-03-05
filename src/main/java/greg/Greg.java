@@ -1,10 +1,12 @@
 package greg;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import greg.exception.GregException;
 import greg.parser.Parser;
 import greg.task.Task;
+
 
 /**
  * Runs the Greg chatbot program.
@@ -40,9 +42,7 @@ public class Greg {
 
         Scanner sc = new Scanner(System.in);
 
-        // Store tasks as Task objects. Currently using a fixed-size array.
-        Task[] tasks = new Task[100];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while (true) {
             String input = sc.nextLine().trim();
@@ -56,11 +56,11 @@ public class Greg {
             }
 
             try {
-                /*
+                /**
                  * The Parser interprets the command string and handles the task logic.
                  * Because taskCount is a primitive, we re-assign it to capture updates.
                  */
-                taskCount = Parser.parseAndExecute(input, tasks, taskCount, line);
+                Parser.parseAndExecute(input, tasks, line);
             } catch (GregException e) {
                 /**
                  * Catches chatbot-specific errors and displays them formatted for the user.
