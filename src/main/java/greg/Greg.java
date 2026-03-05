@@ -63,7 +63,7 @@ public class Greg {
                 Parser.parseAndExecute(input, tasks, line);
             } catch (GregException e) {
                 /**
-                 * Catches chatbot-specific errors and displays them formatted for the user.
+                 * Catches chatbot-specific errors and displays them as formatted for the user.
                  */
                 System.out.println(line);
                 System.out.println(" [ERROR]  " + e.getMessage());
