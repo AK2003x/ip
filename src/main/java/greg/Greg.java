@@ -48,8 +48,6 @@ public class Greg {
 
         Scanner sc = new Scanner(System.in);
 
-        ArrayList<Task> tasks = new ArrayList<>();
-
         while (true) {
             String input = sc.nextLine().trim();
 
