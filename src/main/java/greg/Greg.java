@@ -23,8 +23,8 @@ public class Greg {
     private final Ui ui;
 
     /**
-     * Initializes the Greg chatbot with the specified file path for data storage.
-     * During initialization, it loads existing task data from the disk into memory.
+     * Initialises the Greg chatbot with the specified file path for data storage.
+     * During initialisation, it loads existing task data from the disk into memory.
      *
      * @param filePath The path to the text file where task data is persisted.
      */
