@@ -1,7 +1,8 @@
 package greg.parser;
 
-import java.util.ArrayList;
+import greg.Ui;
 import greg.exception.GregException;
+import greg.storage.Storage;
 import greg.task.Deadline;
 import greg.task.Event;
 import greg.task.Task;
@@ -10,31 +11,32 @@ import greg.tasklist.TaskList;
 
 /**
  * Handles the interpretation and execution of user commands for the Greg chatbot.
- * Uses ArrayList for dynamic task management and provides methods to manipulate the task list.
+ * It coordinates interactions between the TaskList, Ui, and Storage components.
  */
 public class Parser {
 
     /**
      * Parses the user input and executes the corresponding logic.
      *
-     * @param input The raw input string from the user.
-     * @param tasks The ArrayList containing the tasks.
-     * @param line  The decorative line for formatting output.
+     * @param input   The raw input string from the user.
+     * @param tasks   The TaskList containing the tasks.
+     * @param ui      The Ui component for user interaction.
+     * @param storage The Storage component for saving tasks.
      * @throws GregException If input is invalid or formatted incorrectly.
      */
-    public static void parseAndExecute(String input, TaskList tasks, String line) throws GregException {
+    public static void parseAndExecute(String input, TaskList tasks, Ui ui, Storage storage) throws GregException {
         if (input.equals("list")) {
-            handleList(tasks, line);
+            handleList(tasks, ui);
         } else if (input.startsWith("mark")) {
-            handleMark(input, tasks, line);
+            handleMark(input, tasks, ui, storage);
         } else if (input.startsWith("todo")) {
-            handleTodo(input, tasks, line);
+            handleTodo(input, tasks, ui, storage);
         } else if (input.startsWith("deadline")) {
-            handleDeadline(input, tasks, line);
+            handleDeadline(input, tasks, ui, storage);
         } else if (input.startsWith("event")) {
-            handleEvent(input, tasks, line);
+            handleEvent(input, tasks, ui, storage);
         } else if (input.startsWith("delete")) {
-            handleDelete(input, tasks, line);
+            handleDelete(input, tasks, ui, storage);
         } else {
             throw new GregException("I'm sorry, but I don't know what '" + input + "' means :-( Try using todo, deadline, or event!");
         }
@@ -44,30 +46,31 @@ public class Parser {
      * Displays all tasks currently stored in the task list.
      *
      * @param tasks The list of tasks to be displayed.
-     * @param line  The decorative line for formatting output.
+     * @param ui    The Ui component for formatting output.
      */
-    private static void handleList(TaskList tasks, String line) {
-        System.out.println(line);
+    private static void handleList(TaskList tasks, Ui ui) {
+        ui.showLine();
         if (tasks.isEmpty()) {
-            System.out.println("Your list is currently empty!");
+            ui.showMessage("Your list is currently empty!");
         } else {
-            System.out.println("Here are the tasks in your list:");
+            ui.showMessage("Here are the tasks in your list:");
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + ". " + tasks.get(i));
+                ui.showMessage((i + 1) + ". " + tasks.get(i));
             }
         }
-        System.out.println(line);
+        ui.showLine();
     }
 
     /**
      * Marks a specific task as completed based on its index in the list.
      *
-     * @param input The raw input string containing the index.
-     * @param tasks The list of tasks.
-     * @param line  The decorative line for formatting output.
+     * @param input   The raw input string containing the index.
+     * @param tasks   The list of tasks.
+     * @param ui      The Ui component for formatting output.
+     * @param storage The Storage component to save the updated state.
      * @throws GregException If the index is missing, invalid, or out of bounds.
      */
-    private static void handleMark(String input, TaskList tasks, String line) throws GregException {
+    private static void handleMark(String input, TaskList tasks, Ui ui, Storage storage) throws GregException {
         if (input.length() <= 5) {
             throw new GregException("I need a task number to mark! Try 'mark 1'.");
         }
@@ -76,10 +79,11 @@ public class Parser {
 
             if (index >= 0 && index < tasks.size()) {
                 tasks.get(index).setDone(true);
-                System.out.println(line);
-                System.out.println("GOOD JOB!!! I have marked this task as completed for you:");
-                System.out.println("  " + tasks.get(index));
-                System.out.println(line);
+                ui.showLine();
+                ui.showMessage("GOOD JOB!!! I have marked this task as completed for you:");
+                ui.showMessage("  " + tasks.get(index));
+                ui.showLine();
+                storage.save(tasks);
             } else {
                 throw new GregException("I can't mark task #" + (index + 1) + ". You only have " + tasks.size() + " tasks!");
             }
@@ -91,30 +95,33 @@ public class Parser {
     /**
      * Creates and adds a new Todo task to the list.
      *
-     * @param input The raw input string containing the todo description.
-     * @param tasks The list of tasks.
-     * @param line  The decorative line for formatting output.
+     * @param input   The raw input string containing the todo description.
+     * @param tasks   The list of tasks.
+     * @param ui      The Ui component for formatting output.
+     * @param storage The Storage component to save the new task.
      * @throws GregException If the description is empty.
      */
-    private static void handleTodo(String input, TaskList tasks, String line) throws GregException {
+    private static void handleTodo(String input, TaskList tasks, Ui ui, Storage storage) throws GregException {
         if (input.length() <= 5) {
             throw new GregException("The description of a todo cannot be empty.");
         }
         String description = input.substring(5).trim();
         Task newTodo = new Todo(description);
         tasks.addTask(newTodo);
-        printTaskAddedConfirmation(newTodo, tasks.size(), line);
+        printTaskAddedConfirmation(newTodo, tasks.size(), ui);
+        storage.save(tasks);
     }
 
     /**
      * Creates and adds a new Deadline task to the list.
      *
-     * @param input The raw input string containing description and deadline time.
-     * @param tasks The list of tasks.
-     * @param line  The decorative line for formatting output.
+     * @param input   The raw input string containing description and deadline time.
+     * @param tasks   The list of tasks.
+     * @param ui      The Ui component for formatting output.
+     * @param storage The Storage component to save the new task.
      * @throws GregException If formatting is incorrect or the '/by' keyword is missing.
      */
-    private static void handleDeadline(String input, TaskList tasks, String line) throws GregException {
+    private static void handleDeadline(String input, TaskList tasks, Ui ui, Storage storage) throws GregException {
         if (input.length() <= 9) {
             throw new GregException("A deadline needs a description and time.");
         }
@@ -125,33 +132,34 @@ public class Parser {
         String[] parts = rest.split(" /by ", 2);
         Task newDeadline = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.addTask(newDeadline);
-        printTaskAddedConfirmation(newDeadline, tasks.size(), line);
+        printTaskAddedConfirmation(newDeadline, tasks.size(), ui);
+        storage.save(tasks);
     }
 
     /**
      * Removes a task from the list based on its index.
      *
-     * @param input The raw input string containing the index.
-     * @param tasks The list of tasks.
-     * @param line  The decorative line for formatting output.
+     * @param input   The raw input string containing the index.
+     * @param tasks   The list of tasks.
+     * @param ui      The Ui component for formatting output.
+     * @param storage The Storage component to save the updated list.
      * @throws GregException If the index is missing, invalid, or out of bounds.
      */
-    private static void handleDelete(String input, TaskList tasks, String line) throws GregException {
+    private static void handleDelete(String input, TaskList tasks, Ui ui, Storage storage) throws GregException {
         if (input.length() <= 7) {
             throw new GregException("I need a task number to delete! Try 'delete 1'.");
         }
-
         try {
             int index = Integer.parseInt(input.substring(7).trim()) - 1;
 
             if (index >= 0 && index < tasks.size()) {
                 Task removedTask = tasks.deleteTask(index);
-
-                System.out.println(line);
-                System.out.println(" Gotcha. I've removed this task:");
-                System.out.println("   " + removedTask);
-                System.out.println(" Congrats!!! Now you only have " + tasks.size() + " tasks in the list.");
-                System.out.println(line);
+                ui.showLine();
+                ui.showMessage(" Gotcha. I've removed this task:");
+                ui.showMessage("   " + removedTask);
+                ui.showMessage(" Congrats!!! Now you only have " + tasks.size() + " tasks in the list.");
+                ui.showLine();
+                storage.save(tasks);
             } else {
                 throw new GregException("I can't delete task #" + (index + 1) + ". You only have " + tasks.size() + " tasks!");
             }
@@ -163,12 +171,13 @@ public class Parser {
     /**
      * Creates and adds a new Event task to the list.
      *
-     * @param input The raw input string containing description, start time, and end time.
-     * @param tasks The list of tasks.
-     * @param line  The decorative line for formatting output.
+     * @param input   The raw input string containing description, start time, and end time.
+     * @param tasks   The list of tasks.
+     * @param ui      The Ui component for formatting output.
+     * @param storage The Storage component to save the new task.
      * @throws GregException If formatting is incorrect or '/from'/'/to' keywords are missing.
      */
-    private static void handleEvent(String input, TaskList tasks, String line) throws GregException {
+    private static void handleEvent(String input, TaskList tasks, Ui ui, Storage storage) throws GregException {
         if (input.length() <= 6) {
             throw new GregException("An event needs a name, /from, and /to.");
         }
@@ -181,7 +190,8 @@ public class Parser {
 
         Task newEvent = new Event(firstSplit[0].trim(), secondSplit[0].trim(), secondSplit[1].trim());
         tasks.addTask(newEvent);
-        printTaskAddedConfirmation(newEvent, tasks.size(), line);
+        printTaskAddedConfirmation(newEvent, tasks.size(), ui);
+        storage.save(tasks);
     }
 
     /**
@@ -189,13 +199,13 @@ public class Parser {
      *
      * @param task  The task that was added.
      * @param total The total number of tasks now in the list.
-     * @param line  The decorative line for formatting output.
+     * @param ui    The Ui component for formatting output.
      */
-    private static void printTaskAddedConfirmation(Task task, int total, String line) {
-        System.out.println(line);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + total + " tasks in the list.");
-        System.out.println(line);
+    private static void printTaskAddedConfirmation(Task task, int total, Ui ui) {
+        ui.showLine();
+        ui.showMessage("Got it. I've added this task:");
+        ui.showMessage("  " + task);
+        ui.showMessage("Now you have " + total + " tasks in the list.");
+        ui.showLine();
     }
 }

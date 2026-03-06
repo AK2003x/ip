@@ -24,14 +24,15 @@ public class Storage {
 
     /**
      * Loads tasks from the hard disk. Handles missing files/directories.
-     * @return List of tasks; empty if file doesn't exist or is empty.
+     *
+     * @return A TaskList containing tasks loaded from the file.
      */
-    public ArrayList<Task> load() {
+    public TaskList load() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
         if (!file.exists()) {
-            return tasks; // Simply return empty list if file isn't there yet
+            return new TaskList(tasks); // Return empty TaskList wrapper
         }
 
         try (Scanner sc = new Scanner(file)) {
@@ -45,23 +46,23 @@ public class Storage {
         } catch (IOException e) {
             System.out.println(" [ERROR] Could not read from file: " + e.getMessage());
         }
-        return tasks;
+        return new TaskList(tasks); // Wrap the list in TaskList before returning
     }
 
     /**
      * Saves the current task list to the hard disk.
-     * @param tasks The current task list.
+     * @param tasks The TaskList object to be saved.
      */
     public void save(TaskList tasks) {
         File file = new File(filePath);
 
-        // Ensure the directory (e.g., /data/) exists
         File parentDir = file.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
             parentDir.mkdirs();
         }
 
         try (FileWriter fw = new FileWriter(file)) {
+            // Use your getter to access the internal list for iteration
             for (Task t : tasks.getAllTasks()) {
                 fw.write(t.toFileFormat() + System.lineSeparator());
             }
@@ -70,10 +71,6 @@ public class Storage {
         }
     }
 
-    /**
-     * Logic to convert a file line back into a Task object.
-     * Stretch Goal: Validates format and ignores corrupted data.
-     */
     private Task parseLine(String line) {
         try {
             String[] p = line.split(" \\| ");
@@ -99,7 +96,6 @@ public class Storage {
             }
             return task;
         } catch (Exception e) {
-            // If the line is corrupted or missing parts, skip it
             return null;
         }
     }
