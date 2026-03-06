@@ -32,7 +32,7 @@ public class Storage {
         File file = new File(filePath);
 
         if (!file.exists()) {
-            return new TaskList(tasks); // Return empty TaskList wrapper
+            return new TaskList(tasks);
         }
 
         try (Scanner sc = new Scanner(file)) {
@@ -46,7 +46,7 @@ public class Storage {
         } catch (IOException e) {
             System.out.println(" [ERROR] Could not read from file: " + e.getMessage());
         }
-        return new TaskList(tasks); // Wrap the list in TaskList before returning
+        return new TaskList(tasks);
     }
 
     /**
@@ -62,7 +62,6 @@ public class Storage {
         }
 
         try (FileWriter fw = new FileWriter(file)) {
-            // Use your getter to access the internal list for iteration
             for (Task t : tasks.getAllTasks()) {
                 fw.write(t.toFileFormat() + System.lineSeparator());
             }
