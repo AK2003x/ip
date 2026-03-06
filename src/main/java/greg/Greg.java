@@ -8,7 +8,7 @@ import greg.exception.GregException;
 
 /**
  * Acts as the main controller for the Greg chatbot application.
- * This class initializes the user interface, storage systems, and task management
+ * This class initialises the user interface, storage systems, and task management
  * components, then enters the main execution loop to handle user interaction.
  */
 public class Greg {
