@@ -6,6 +6,7 @@ import greg.task.Deadline;
 import greg.task.Event;
 import greg.task.Task;
 import greg.task.Todo;
+import greg.tasklist.TaskList;
 
 /**
  * Handles the interpretation and execution of user commands for the Greg chatbot.
@@ -21,7 +22,7 @@ public class Parser {
      * @param line  The decorative line for formatting output.
      * @throws GregException If input is invalid or formatted incorrectly.
      */
-    public static void parseAndExecute(String input, ArrayList<Task> tasks, String line) throws GregException {
+    public static void parseAndExecute(String input, TaskList tasks, String line) throws GregException {
         if (input.equals("list")) {
             handleList(tasks, line);
         } else if (input.startsWith("mark")) {
@@ -45,7 +46,7 @@ public class Parser {
      * @param tasks The list of tasks to be displayed.
      * @param line  The decorative line for formatting output.
      */
-    private static void handleList(ArrayList<Task> tasks, String line) {
+    private static void handleList(TaskList tasks, String line) {
         System.out.println(line);
         if (tasks.isEmpty()) {
             System.out.println("Your list is currently empty!");
@@ -66,7 +67,7 @@ public class Parser {
      * @param line  The decorative line for formatting output.
      * @throws GregException If the index is missing, invalid, or out of bounds.
      */
-    private static void handleMark(String input, ArrayList<Task> tasks, String line) throws GregException {
+    private static void handleMark(String input, TaskList tasks, String line) throws GregException {
         if (input.length() <= 5) {
             throw new GregException("I need a task number to mark! Try 'mark 1'.");
         }
@@ -95,13 +96,13 @@ public class Parser {
      * @param line  The decorative line for formatting output.
      * @throws GregException If the description is empty.
      */
-    private static void handleTodo(String input, ArrayList<Task> tasks, String line) throws GregException {
+    private static void handleTodo(String input, TaskList tasks, String line) throws GregException {
         if (input.length() <= 5) {
             throw new GregException("The description of a todo cannot be empty.");
         }
         String description = input.substring(5).trim();
         Task newTodo = new Todo(description);
-        tasks.add(newTodo);
+        tasks.addTask(newTodo);
         printTaskAddedConfirmation(newTodo, tasks.size(), line);
     }
 
@@ -113,7 +114,7 @@ public class Parser {
      * @param line  The decorative line for formatting output.
      * @throws GregException If formatting is incorrect or the '/by' keyword is missing.
      */
-    private static void handleDeadline(String input, ArrayList<Task> tasks, String line) throws GregException {
+    private static void handleDeadline(String input, TaskList tasks, String line) throws GregException {
         if (input.length() <= 9) {
             throw new GregException("A deadline needs a description and time.");
         }
@@ -123,7 +124,7 @@ public class Parser {
         }
         String[] parts = rest.split(" /by ", 2);
         Task newDeadline = new Deadline(parts[0].trim(), parts[1].trim());
-        tasks.add(newDeadline);
+        tasks.addTask(newDeadline);
         printTaskAddedConfirmation(newDeadline, tasks.size(), line);
     }
 
@@ -135,7 +136,7 @@ public class Parser {
      * @param line  The decorative line for formatting output.
      * @throws GregException If the index is missing, invalid, or out of bounds.
      */
-    private static void handleDelete(String input, ArrayList<Task> tasks, String line) throws GregException {
+    private static void handleDelete(String input, TaskList tasks, String line) throws GregException {
         if (input.length() <= 7) {
             throw new GregException("I need a task number to delete! Try 'delete 1'.");
         }
@@ -144,7 +145,7 @@ public class Parser {
             int index = Integer.parseInt(input.substring(7).trim()) - 1;
 
             if (index >= 0 && index < tasks.size()) {
-                Task removedTask = tasks.remove(index);
+                Task removedTask = tasks.deleteTask(index);
 
                 System.out.println(line);
                 System.out.println(" Gotcha. I've removed this task:");
@@ -167,7 +168,7 @@ public class Parser {
      * @param line  The decorative line for formatting output.
      * @throws GregException If formatting is incorrect or '/from'/'/to' keywords are missing.
      */
-    private static void handleEvent(String input, ArrayList<Task> tasks, String line) throws GregException {
+    private static void handleEvent(String input, TaskList tasks, String line) throws GregException {
         if (input.length() <= 6) {
             throw new GregException("An event needs a name, /from, and /to.");
         }
@@ -179,7 +180,7 @@ public class Parser {
         String[] secondSplit = firstSplit[1].split(" /to ", 2);
 
         Task newEvent = new Event(firstSplit[0].trim(), secondSplit[0].trim(), secondSplit[1].trim());
-        tasks.add(newEvent);
+        tasks.addTask(newEvent);
         printTaskAddedConfirmation(newEvent, tasks.size(), line);
     }
 

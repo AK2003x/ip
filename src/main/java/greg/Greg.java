@@ -1,13 +1,13 @@
 package greg;
 
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.nio.file.Paths;
 
 import greg.exception.GregException;
 import greg.parser.Parser;
 import greg.task.Task;
 import greg.storage.Storage;
+import greg.tasklist.TaskList;
 
 
 /**
@@ -26,8 +26,7 @@ public class Greg {
     public static void main(String[] args) {
         // Storage
         Storage storage = new Storage("data/greg.txt");
-        ArrayList<Task> tasks = storage.load();
-
+        TaskList tasks = new TaskList(storage.load());
         String chatbotName = "Greg";
         String line = "--------------------------------------------";
 

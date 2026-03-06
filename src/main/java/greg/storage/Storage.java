@@ -10,6 +10,7 @@ import greg.task.Task;
 import greg.task.Todo;
 import greg.task.Deadline;
 import greg.task.Event;
+import greg.tasklist.TaskList;
 
 /**
  * Handles loading and saving tasks to a plaintext file.
@@ -51,7 +52,7 @@ public class Storage {
      * Saves the current task list to the hard disk.
      * @param tasks The current task list.
      */
-    public void save(ArrayList<Task> tasks) {
+    public void save(TaskList tasks) {
         File file = new File(filePath);
 
         // Ensure the directory (e.g., /data/) exists
@@ -61,7 +62,7 @@ public class Storage {
         }
 
         try (FileWriter fw = new FileWriter(file)) {
-            for (Task t : tasks) {
+            for (Task t : tasks.getAllTasks()) {
                 fw.write(t.toFileFormat() + System.lineSeparator());
             }
         } catch (IOException e) {
