@@ -1,6 +1,6 @@
 package greg.parser;
 
-import greg.Ui;
+import greg.ui.Ui;
 import greg.exception.GregException;
 import greg.storage.Storage;
 import greg.task.Deadline;

@@ -1,4 +1,4 @@
-package greg;
+package greg.ui;
 
 import java.util.Scanner;
 
