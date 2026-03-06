@@ -2,10 +2,12 @@ package greg;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.nio.file.Paths;
 
 import greg.exception.GregException;
 import greg.parser.Parser;
 import greg.task.Task;
+import greg.storage.Storage;
 
 
 /**
@@ -22,6 +24,10 @@ public class Greg {
      *
      */
     public static void main(String[] args) {
+        // Storage
+        Storage storage = new Storage("data/greg.txt");
+        ArrayList<Task> tasks = storage.load();
+
         String chatbotName = "Greg";
         String line = "--------------------------------------------";
 
@@ -42,8 +48,6 @@ public class Greg {
 
         Scanner sc = new Scanner(System.in);
 
-        ArrayList<Task> tasks = new ArrayList<>();
-
         while (true) {
             String input = sc.nextLine().trim();
 
@@ -61,6 +65,8 @@ public class Greg {
                  * Because taskCount is a primitive, we re-assign it to capture updates.
                  */
                 Parser.parseAndExecute(input, tasks, line);
+                // Save tasks into Storage
+                storage.save(tasks);
             } catch (GregException e) {
                 /**
                  * Catches chatbot-specific errors and displays them as formatted for the user.

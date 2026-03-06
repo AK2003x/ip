@@ -51,4 +51,17 @@ public class Task {
         String status = isDone ? "[X]" : "[ ]";
         return status + " " + description;
     }
+
+    /**
+     * Returns a string formatted for saving to a file.
+     * Subclasses should override this to include their specific fields.
+     *
+     * @return String representation of the task for file storage.
+     */
+    public String toFileFormat() {
+        // Default format for a generic task
+        return "Task | " + (isDone ? "1" : "0") + " | " + description;
+    }
 }
+
+
