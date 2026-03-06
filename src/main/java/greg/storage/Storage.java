@@ -13,17 +13,23 @@ import greg.task.Event;
 import greg.tasklist.TaskList;
 
 /**
- * Handles loading and saving tasks to a plaintext file.
+ * Handles loading and saving tasks to a plaintext file on the hard disk.
  */
 public class Storage {
+    /** The path to the file where tasks are stored. */
     private final String filePath;
 
+    /**
+     * Constructs a Storage object with a specified file path.
+     *
+     * @param filePath The relative or absolute path to the data file.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Loads tasks from the hard disk. Handles missing files/directories.
+     * Loads tasks from the hard disk. Handles missing files or directories by returning an empty list.
      *
      * @return A TaskList containing tasks loaded from the file.
      */
@@ -50,8 +56,10 @@ public class Storage {
     }
 
     /**
-     * Saves the current task list to the hard disk.
-     * @param tasks The TaskList object to be saved.
+     * Saves the current task list to the hard disk in a formatted plaintext style.
+     * Creates the parent directory if it does not exist.
+     *
+     * @param tasks The TaskList object containing tasks to be saved.
      */
     public void save(TaskList tasks) {
         File file = new File(filePath);
@@ -70,6 +78,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses a single line of text from the data file into a Task object.
+     *
+     * @param line The raw string line from the data file.
+     * @return The corresponding Task object, or null if the line is corrupted.
+     */
     private Task parseLine(String line) {
         try {
             String[] p = line.split(" \\| ");

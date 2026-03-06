@@ -48,8 +48,8 @@ Use this command to find a specific task by name.
 ---
 
 ##  Data Saving
-You will also not need to worry about losing your progress! I have made it so that your tasks are
-automatically saved to a hard disk file (`data/greg.txt`) every time you make a change.
+You will also not need to worry about losing your progress! I have made it so that your tasks are 
+automatically saved to a hard disk file (`data/greg.txt`) every time you make a change. 
 Your list of tasks will then be reloaded the next time you open your chatbot!
 
 ---

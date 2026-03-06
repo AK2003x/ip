@@ -199,9 +199,9 @@ public class Parser {
     /**
      * Handles the find command by searching for tasks that match the user's keyword.
      *
-     * @param input The raw input string.
-     * @param tasks The TaskList to search.
-     * @param ui    The Ui component for output.
+     * @param input   The raw input string.
+     * @param tasks   The TaskList to search.
+     * @param ui      The Ui component for output.
      * @throws GregException If the keyword is missing.
      */
     private static void handleFind(String input, TaskList tasks, Ui ui) throws GregException {
@@ -238,6 +238,4 @@ public class Parser {
         ui.showMessage("Now you have " + total + " tasks in the list.");
         ui.showLine();
     }
-
-
 }

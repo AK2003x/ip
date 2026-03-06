@@ -1,21 +1,21 @@
 package greg.task;
 
 /**
- * The greg.task.Event class represents a task that starts at a specific time and ends at a specific time.
- * It extends the greg.task.Task class by adding a start ("start") and end ("end") time.
+ * Represents a task that occurs within a specific time frame.
+ * Extends the Task class by adding start and end times to the task description.
  */
 public class Event extends Task {
 
-    // The start time of the event.
+    /** The start time or date of the event. */
     protected String start;
 
-    // The end time of the event.
+    /** The end time or date of the event. */
     protected String end;
 
     /**
-     * Constructs an greg.task.Event task with the given description, start time, and end time.
+     * Constructs an Event task with the specified description, start time, and end time.
      *
-     * @param description The description of the event task.
+     * @param description The description of the event.
      * @param start The start time of the event.
      * @param end The end time of the event.
      */
@@ -26,16 +26,22 @@ public class Event extends Task {
     }
 
     /**
-     * Returns a string representation of the greg.task.Event task.
-     * Overrides greg.task.Task's toString() method to add the [E] tag and event time range.
+     * Returns a string representation of the Event task.
+     * Includes the task type identifier [E], the status icon, description, and the time range.
      *
-     * @return A string representing the event task.
+     * @return A string representing the event task for display in the UI.
      */
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
     }
 
+    /**
+     * Returns a string formatted for saving the Event task to a data file.
+     * The format used is "E | status | description | start | end".
+     *
+     * @return A pipe-separated string representing the Event task.
+     */
     @Override
     public String toFileFormat() {
         return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + start + " | " + end;

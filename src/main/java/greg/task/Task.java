@@ -1,50 +1,50 @@
 package greg.task;
 
 /**
- * The greg.task.Task class represents a general task with a description.
- * It is also a base class for similar Classes to inherit from such as greg.task.Deadline, greg.task.Todo & event.
+ * Represents a general task with a description and a completion status.
+ * Acts as the base class for specialized task types such as Todo, Deadline, and Event.
  */
 public class Task {
 
-    // The description of the task.
+    /** The description of the task. */
     protected String description;
 
-    // Tracks whether the task is completed.
+    /** Tracks whether the task has been marked as completed. */
     protected boolean isDone;
 
     /**
-     * Constructor for the greg.task.Task class.
-     * Initialises a task with a specific description.
+     * Constructs a Task with the specified description.
+     * The task is initialized as not done by default.
      *
      * @param description The description of the task.
      */
     public Task(String description) {
         this.description = description;
+        this.isDone = false;
     }
 
     /**
-     * Returns whether this task is completed.
+     * Returns the completion status of the task.
      *
-     * @return True if task is done, false otherwise.
+     * @return true if the task is completed, false otherwise.
      */
     public boolean isDone() {
         return isDone;
     }
 
     /**
-     * Sets the completion status of this task.
+     * Sets the completion status of the task.
      *
-     * @param done True if task should be marked done, false otherwise.
+     * @param done true to mark the task as completed, false to mark it as incomplete.
      */
     public void setDone(boolean done) {
         isDone = done;
     }
 
     /**
-     * Returns a string representation of the task.
-     * By default, it returns the description of the task.
+     * Returns a string representation of the task, including its completion status icon.
      *
-     * @return A string representation of the task.
+     * @return A string formatted as "[X] description" if done, or "[ ] description" otherwise.
      */
     @Override
     public String toString() {
@@ -53,7 +53,8 @@ public class Task {
     }
 
     /**
-     * Returns the description of the task.
+     * Retrieves the description of the task.
+     *
      * @return The task description string.
      */
     public String getDescription() {
@@ -61,15 +62,12 @@ public class Task {
     }
 
     /**
-     * Returns a string formatted for saving to a file.
-     * Subclasses should override this to include their specific fields.
+     * Returns a string formatted for storage in a plaintext file.
+     * This method is intended to be overridden by subclasses to include specialized fields.
      *
-     * @return String representation of the task for file storage.
+     * @return A pipe-separated string representing the task's state for file storage.
      */
     public String toFileFormat() {
-        // Default format for a generic task
         return "Task | " + (isDone ? "1" : "0") + " | " + description;
     }
 }
-
-
