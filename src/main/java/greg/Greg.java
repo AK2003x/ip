@@ -48,7 +48,7 @@ public class Greg {
 
             if (fullCommand.equalsIgnoreCase("bye")) {
                 ui.showLine();
-                ui.showMessage(" GOODBYEEE!!! Hope to see you again soon!");
+                ui.showMessage(" GOODBYEEEE!!! Hope to see you again soon!");
                 ui.showLine();
                 isExit = true;
             } else {
