@@ -5,7 +5,7 @@ Greetings! I’m **Greg**, a lightweight, desktop-based chatbot designed to help
 ---
 
 ##  Quick Start
-1. Ensure you have **Java 11** or above installed on your computer.
+1. Ensure you have **Java 17** or above installed on your computer.
 2. Download the latest `greg.jar` file.
 3. Open your terminal, navigate to the folder, and run:  
    `java -jar greg.jar`
