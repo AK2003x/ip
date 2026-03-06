@@ -44,4 +44,23 @@ public class TaskList {
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
+
+    /**
+     * Searches for tasks containing the keyword in their description.
+     *
+     * @param keyword The search term.
+     * @return A new TaskList containing the filtered results.
+     */
+    public TaskList findTasks(String keyword) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getDescription().toLowerCase().contains(lowerKeyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return new TaskList(matchingTasks);
+    }
 }

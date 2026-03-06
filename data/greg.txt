@@ -1,2 +1,3 @@
 T | 0 | help
 D | 0 | help | Monday
+T | 0 | Do Homework

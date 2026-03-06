@@ -35,6 +35,8 @@ public class Parser {
             handleDeadline(input, tasks, ui, storage);
         } else if (input.startsWith("event")) {
             handleEvent(input, tasks, ui, storage);
+        } else if (input.startsWith("find")) {
+            handleFind(input, tasks, ui);
         } else if (input.startsWith("delete")) {
             handleDelete(input, tasks, ui, storage);
         } else {
@@ -195,6 +197,34 @@ public class Parser {
     }
 
     /**
+     * Handles the find command by searching for tasks that match the user's keyword.
+     *
+     * @param input The raw input string.
+     * @param tasks The TaskList to search.
+     * @param ui    The Ui component for output.
+     * @throws GregException If the keyword is missing.
+     */
+    private static void handleFind(String input, TaskList tasks, Ui ui) throws GregException {
+        if (input.length() <= 5) {
+            throw new GregException("I need a keyword to search for what you're looking for! Try 'find [task] i.e. find Do Homework'.");
+        }
+
+        String keyword = input.substring(5).trim();
+        TaskList results = tasks.findTasks(keyword);
+
+        ui.showLine();
+        if (results.isEmpty()) {
+            ui.showMessage(" Im sorry but I couldn't find any tasks matching: " + keyword);
+        } else {
+            ui.showMessage(" Here are the matching tasks in your list:");
+            for (int i = 0; i < results.size(); i++) {
+                ui.showMessage(" " + (i + 1) + "." + results.get(i));
+            }
+        }
+        ui.showLine();
+    }
+
+    /**
      * Prints a confirmation message to the console after a task is successfully added.
      *
      * @param task  The task that was added.
@@ -208,4 +238,6 @@ public class Parser {
         ui.showMessage("Now you have " + total + " tasks in the list.");
         ui.showLine();
     }
+
+
 }

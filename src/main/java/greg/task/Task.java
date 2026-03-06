@@ -53,6 +53,14 @@ public class Task {
     }
 
     /**
+     * Returns the description of the task.
+     * @return The task description string.
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
      * Returns a string formatted for saving to a file.
      * Subclasses should override this to include their specific fields.
      *
